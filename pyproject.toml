@@ -1,0 +1,47 @@
+[tool.poetry]
+name = "fastapi-event"
+version = "0.1.0"
+description = ""
+authors = ["sabrinasilvax <143810738+sabrinasilvax@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.11.*"
+fastapi = "^0.109.0"
+uvicorn = "^0.25.0"
+
+
+[tool.poetry.group.dev.dependencies]
+taskipy = "^1.12.2"
+pytest = "^7.4.4"
+pytest-cov = "^4.1.0"
+ruff = "^0.1.13"
+isort = "^5.13.2"
+httpx = "^0.26.0"
+blue = "^0.9.1"
+
+[tool.isort]
+profile = "black"
+line_length = 79
+extend_skip = ['migrations']
+
+[tool.pytest.ini_options]
+pythonpath = "."
+
+[tool.blue]
+extend-exclude = '(migrations/)'
+
+[tool.taskipy.tasks]
+lint = 'ruff . && blue --check . --diff'
+format = 'blue . && isort .'
+run = 'uvicorn fastapi_event.app:app --reload'
+pre_test = 'task lint'
+test = 'pytest -s -x --cov=fastapi_event -vv'
+post_test = 'coverage html'
+
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
